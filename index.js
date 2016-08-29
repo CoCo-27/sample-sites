@@ -22,8 +22,15 @@ app.get('/simpletext', function(request, response) {
   response.send("A string of uninteresting text");
 });
 
+app.get('/times', function(request, response) {
+    var result = ''
+    var times = process.env.TIMES || 5
+    for (i=0; i < times; i++)
+      result += i + ' ';
+  response.send(result);
+});
+
 app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
 });
-
 
