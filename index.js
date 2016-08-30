@@ -31,6 +31,7 @@ app.get('/times', function(request, response) {
 });
 
 var pg = require('pg');
+console.log(pg);
 
 app.get('/db', function (request, response) {
   pg.connect(process.env.DATABASE_URL, function(err, client, done) {
