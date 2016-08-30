@@ -1,0 +1,7 @@
+.hidden-list {
+  visibility: hidden;
+}
+
+.to-mulligan {
+  text-decoration : line-through
+}
