@@ -15,7 +15,7 @@
   <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   <!-- Custom styles for this template -->
-  <link href="../../stylesheets/starter-template.css" rel="stylesheet">
+  <link href="../../css/starter-template.css" rel="stylesheet">
 
   <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
   <!--[if lt IE 9]>
@@ -80,29 +80,12 @@
   </div>
   <!-- /.container -->
 
+  <script src="../../scripts/helpers/utils.js"></script>
+
   <script>
     function getValue(id) {
       var elem = document.getElementById(id);
       return elem.value != "" ? Number(elem.value) : Number(elem.getAttribute("placeholder"));
-    }
-
-    function percentage(x, digits) {
-      return (x * 100).toFixed(digits) + "%"
-    }
-
-    function hyperGeo(N, K, n, k) {
-      return (binomial(K,k)*binomial(N-K, n-k))/binomial(N,n);
-    }
-
-    function binomial(n, k) {
-      if (k < 0 || k > n) return 0;
-      if (k == 0 || k == n) return 1;
-      var c = 1;
-      if (k > n - k) k = n - k; // take advantage of symmetry
-      for (var i = 0; i < k; i++) {
-        c = c * (n - i) / (i + 1);
-      }
-      return c;
     }
 
     function calculateProb() {
@@ -113,11 +96,12 @@
    //   var copies = getValue("copies");
       var target = getValue("target");
 
-      var probAtLeastOne = 1 - hyperGeo(deck, target, drawn, 0);
+      var probAtLeastOne = 1 - utils.hyperGeo(deck, target, drawn, 0);
     //  document.getElementById("simple").innerHTML = percentage(drawn / (deck - replacedCopies), 1);
-      document.getElementById("simple").innerHTML = percentage(probAtLeastOne);
+      document.getElementById("simple").innerHTML = utils.percentage(probAtLeastOne);
     }
   </script>
+
 
   <!-- Bootstrap core JavaScript
     ================================================== -->

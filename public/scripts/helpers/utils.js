@@ -2,7 +2,7 @@
 var utils = (function (){
   var obj = {};
 
-  // This assumes array is shuffled and swaps the elements of xs into array such that array ends up shuffled.
+  // This assumes array is shuffled and swaps the elements of xs into array such that array remains shuffled.
   // i.e. had the array contained xs as its starting elements, and then been shuffled, this is what you'd get.
   function shuffleInto(xs, array){
     if(xs.length > array.length) throw new Error("Target array must be at least as long as there are elements to shuffle into it.")
@@ -40,6 +40,28 @@ var utils = (function (){
 
     return array;
 }
+
+    function percentage(x, digits) {
+      return (x * 100).toFixed(digits) + "%"
+    }
+
+    function hyperGeo(N, K, n, k) {
+      return (binomial(K,k)*binomial(N-K, n-k))/binomial(N,n);
+    }
+
+    function binomial(n, k) {
+      if (k < 0 || k > n) return 0;
+      if (k == 0 || k == n) return 1;
+      var c = 1;
+      if (k > n - k) k = n - k; // take advantage of symmetry
+      for (var i = 0; i < k; i++) {
+        c = c * (n - i) / (i + 1);
+      }
+      return c;
+    }
+  obj.percentage = percentage;
+  obj.hyperGeo = hyperGeo;
+  obj.binomial = binomial;
   obj.shuffle = shuffle;
   obj.shuffleInto = shuffleInto;
   return obj;

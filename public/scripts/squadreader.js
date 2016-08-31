@@ -1,31 +1,39 @@
-/*var fs = require('fs');
-var cards;
+var currentSquad, hand, squad = {};
 
-fs.readFile('simplifiedcards.json', 'utf8', function (err, data) {
-  if (err) throw err; // we'll not consider error handling for now
-  cards = JSON.parse(data);
-  loadSquad("MToxMDEsMzoxMTAsMzoxMTIsMzoxMTUsMzoxMTYsMzoxMjIsMjoxMTAxMSwyOjIwMDgwLDM6MjAwODUsMzoyMDA4NiwyOjIwMDg3LDM6MjAxMDIsMjoyMDEyOSwyOjIwMTU1LDM6MjAxNjgsMjozMDAwNw==");
+function dealNewHand() {
+  if (squad !== undefined) {
+    // Have to load the squad first
+    currentSquad = getSquadList();
+    utils.shuffle(currentSquad);
+    hand = currentSquad.slice(0, 5);
+    currentSquad = currentSquad.slice(5, currentSquad.length);
+    return hand;
+  }
+}
 
-  console.log(getSquadTextList());
+function resetSquad() {
+  currentSquad = getSquadList();
+  utils.shuffle(currentSquad);
+}
 
-}); */
+function mulligan(cardIDs) {
+  if (currentSquad == undefined) return; // Have to read the squad first
+  var newCards = currentSquad.slice(0, cardIDs.length);
+  currentSquad = currentSquad.slice(cardIDs.length, currentSquad.length);
+  var id = 0;
+  cardIDs.forEach((x) => {
+    hand[x] = newCards[id++];
+  });
 
-// var cards = require('./cardtest.js').cards;
+  return hand;
+}
 
-var squad = {};
-
-//loadSquad()
-
-//console.log(loadSquad("MToxMDEsMzoxMTAsMzoxMTIsMzoxMTUsMzoxMTYsMzoxMjIsMjoxMTAxMSwyOjIwMDgwLDM6MjAwODUsMzoyMDA4NiwyOjIwMDg3LDM6MjAxMDIsMjoyMDEyOSwyOjIwMTU1LDM6MjAxNjgsMjozMDAwNw==")); 
-
-//console.log(Object.keys(squad));
-//console.log(getSquadTextList());
 
 function loadSquad(squadHash) {
   squad = {}; // delete the old squad
   try {
-   // var s = new Buffer(squadHash, 'base64').toString();
-      var s = atob(squadHash);
+    // var s = new Buffer(squadHash, 'base64').toString();
+    var s = atob(squadHash);
   } catch (e) {
     // TODO Tell the user that the hash is not valid.
     console.log(e);
@@ -44,8 +52,8 @@ function loadSquad(squadHash) {
     };
   }
   //  var generals = getCardsByCardAttr(squad, 'type', 'General');
-//  console.log("loaded squad");
-//  console.log(squad);
+  //  console.log("loaded squad");
+  //  console.log(squad);
   return true;
 }
 
@@ -61,7 +69,7 @@ function getSquadTextList() {
 function getSquadList() {
   var out = [];
   for (var unit_id in squad) {
-    for (var i = 0; i < squad[unit_id].count; i++){
+    for (var i = 0; i < squad[unit_id].count; i++) {
       out.push(squad[unit_id].name);
     }
   }
@@ -78,4 +86,3 @@ function getSquadList() {
   }
   return o;
 } */
-

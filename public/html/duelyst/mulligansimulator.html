@@ -16,8 +16,8 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
   <!-- Custom styles for this template -->
-  <link href="../../stylesheets/starter-template.css" rel="stylesheet">
-  <link href="../../stylesheets/mulligan.css" rel="stylesheet">
+  <link href="../../css/starter-template.css" rel="stylesheet">
+  <link href="../../css/mulligan.css" rel="stylesheet">
 
   <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
   <!--[if lt IE 9]>
@@ -82,11 +82,11 @@ and then display the hand -->
 
   </div>
   <!-- /.container -->
-  <script src="../../javascripts/utils.js"></script>
-  <script src="../../javascripts/cardtest.js"></script>
-  <script src="../../javascripts/parseduelystdbhash.js"></script>
+  <script src="../../scripts/helpers/utils.js"></script>
+  <script src="../../scripts/cardtest.js"></script>
+  <script src="../../scripts/squadreader.js"></script>
   <script>
-    var currentSquad, hand;
+
 
     function toggleStrike(elem) {
       var parent = elem.parentElement;
@@ -102,7 +102,7 @@ and then display the hand -->
 
     function readAndDisplaySquad() {
       initializeSquad();
-      displayTextSquad();
+      display(getSquadTextList());
     }
 
     function drawAndDisplay() {
@@ -153,11 +153,6 @@ and then display the hand -->
       }
     }
 
-    function displayTextSquad() {
-      // document.getElementById('main').appendChild(makeUL(getSquadTextList()));
-      display(getSquadTextList());
-    }
-
     function display(cards, id) {
       if (id == undefined) id = 'squadlist';
       var oldSquadList = document.getElementById(id);
@@ -185,34 +180,6 @@ and then display the hand -->
 
       // Finally, return the constructed list:
       return list;
-    }
-
-    function dealNewHand() {
-      if (squad !== undefined) {
-        // Have to load the squad first
-        currentSquad = getSquadList();
-        utils.shuffle(currentSquad);
-        hand = currentSquad.slice(0, 5);
-        currentSquad = currentSquad.slice(5, currentSquad.length);
-        return hand;
-      }
-    }
-
-    function resetSquad() {
-      currentSquad = getSquadList();
-      utils.shuffle(currentSquad);
-    }
-
-    function mulligan(cardIDs) {
-      if (currentSquad == undefined) return; // Have to read the squad first
-      var newCards = currentSquad.slice(0, cardIDs.length);
-      currentSquad = currentSquad.slice(cardIDs.length, currentSquad.length);
-      var id = 0;
-      cardIDs.forEach((x) => {
-        hand[x] = newCards[id++];
-      });
-
-      return hand;
     }
 
 
