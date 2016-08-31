@@ -28,6 +28,20 @@ function mulligan(cardIDs) {
   return hand;
 }
 
+function getCurve(types){
+  var card, minionCurve = [];
+  for(var i = 0; i < 10; i++){
+    minionCurve[i] = 0;
+  }
+  for(var id in squad){
+    card = squad[id];
+    if(types.indexOf(card.type) != -1){
+      minionCurve[card.cost] += card.count;
+    }
+  }
+  console.log("Getting curve: " + minionCurve);
+  return minionCurve;
+}
 
 function loadSquad(squadHash) {
   squad = {}; // delete the old squad
@@ -47,7 +61,9 @@ function loadSquad(squadHash) {
     }
     squad[u[1]] = {
       count: parseInt(u[0]),
-      name: cards[u[1]]
+      name: cards[u[1]].name,
+      cost: cards[u[1]].cost,
+      type: cards[u[1]].type
         // unit: cards[u[1]]
     };
   }
