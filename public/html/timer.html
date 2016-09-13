@@ -13,11 +13,12 @@
   <title>Sample Sites</title>
 
   <!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-<!--  <link href="./bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"> -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <!--  <link href="./bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"> -->
 
   <!-- Custom styles for this template -->
   <link href="../css/starter-template.css" rel="stylesheet">
+  <link href="../css/timer.css" rel="stylesheet">
 
 
   <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -54,17 +55,28 @@
   <div class="container">
 
     <div class="starter-template">
-      <h1>Some websites I have made</h1>
-      <p class="lead">Inspired by Jennifer Dewalt's <a href="https://jenniferdewalt.com/">180 websites in 180 days</a>, I'm doing something similar.
-        <br> The idea being to learn how to put websites together by putting websites together.</p>
-    </div>
+      <h1>Simple timers</h1>
 
-    <div class="list-group">
-      <a href="#" class="list-group-item active"> Going nowhere</a>
-      <a href="./duelyst/probabilities.html" class="list-group-item"> Probability</a>
-      <a href="./duelyst/squadreader.html" class="list-group-item"> DuelystDB reader</a>
-      <a href="./duelyst/mulligansimulator.html" class="list-group-item"> Mulligan simulator</a>
-      <a href="./duelyst/squadanalyser.html" class="list-group-item"> Squad analyser</a>
+      <!-- This page is a modification of https://www.sitepoint.com/build-javascript-countdown-timer-no-dependencies/ -->
+      <div>
+        <div class="timer" id="firstTimer">
+          <span>Hours: </span>
+          <span class="hours">
+            0 </span>
+          <span>Minutes:</span>
+          <span class="minutes">
+             0
+          </span>
+          <span>Seconds:</span>
+          <span class="seconds">
+          0
+          </span>
+          <div>
+            <input id="timer-input" type="text" placeholder="3600">
+          </div>
+          <button class="starter"> Start</button>
+        </div>
+      </div>
     </div>
 
   </div>
@@ -75,12 +87,37 @@
     ================================================== -->
   <!-- Placed at the end of the document so the pages load faster -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-  <script>
-    window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')
+  <script src="../scripts/timer.js">
+
+
   </script>
+  <script>
+    var timerOne = new Timer("firstTimer");
+
+    var time = $("#firstTimer").find("input");
+    console.log("time: ")
+    console.log(time);
+    console.log(time.val());
+    $("#firstTimer button").on('click', function() {
+      var test = $("#timer-input")
+      console.log("Test");
+      console.log(test)
+      timerOne.startTimer(test.val());
+    });
+
+  </script>
+
+  <script>
+    var elem = $("div input");
+    //  elem.val("Val!");
+    console.log(elem);
+
+  </script>
+
+
   <!-- Latest compiled and minified JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-<!--  <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script> -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <!--  <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script> -->
 </body>
 
 </html>
