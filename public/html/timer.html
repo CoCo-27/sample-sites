@@ -59,28 +59,7 @@
 
       <!-- This page is a modification of https://www.sitepoint.com/build-javascript-countdown-timer-no-dependencies/ -->
       <div class="timer-group">
-        <!--
-        <div class="timer" id="first-timer">
-          <span>Hours: </span>
-          <input type="text" class="hours">
-          <span>Minutes:</span>
-          <input type="text" class="minutes">
-          <span>Seconds:</span>
-          <input type="text" class="seconds">
-          <button class="start"> Start</button>
-          <button class="stop"> Stop</button>
-        </div>
-        <div class="timer" id="second-timer">
-          <span>Hours: </span>
-          <input type="text" class="hours">
-          <span>Minutes:</span>
-          <input type="text" class="minutes">
-          <span>Seconds:</span>
-          <input type="text" class="seconds">
-          <button class="start"> Start</button>
-          <button class="stop"> Stop</button>
-        </div>
-    -->
+        <button class="add-timer"> Add new timer</button>
       </div>
     </div>
   </div>
@@ -104,44 +83,55 @@
 
   </script>
   <script>
-    var timerCount = 0;
-    attachTimer("timer-" + timerCount++);
-    attachTimer("timer-" + timerCount++);
-    attachTimer("timer-" + timerCount++);
+    var timerId = 0;
+    attachTimer();
+    attachTimer();
+    attachTimer();
 
-    function attachTimer(id) {
+    $("button.add-timer").on('click', function (event) {
+      attachTimer();
+    })
+
+    function attachTimer() {
       $.get("./partials/single-timer.html", function(data){
-        $(data).attr("id", id).appendTo(".timer-group");
-        initTimer(id);
+        var timerEl = $(data).appendTo(".timer-group");
+        initTimer(timerEl);
       });
     }
 // TODO add a button to append additional timers up to a cap, say 20.
-    function initTimer(id) {
-
-      var timer = new Timer(id);
-      $("#" + id).find("button.start").on('click', function(event) {
-        var hours = Number($("#" + id).find("input.hours").val());
-        var minutes = Number($("#" + id).find("input.minutes").val());
-        var seconds = Number($("#" + id).find("input.seconds").val());
+    function initTimer(timerEl) {
+      var timer = new Timer(updateDisplay);
+      timerEl.find("button.start").on('click', function(event) {
+        var hours = Number(timerEl.find("input.hours").val());
+        var minutes = Number(timerEl.find("input.minutes").val());
+        var seconds = Number(timerEl.find("input.seconds").val());
 
         console.log(`hours ${hours} minutes ${minutes} seconds ${seconds}`)
         var ms = ((((hours * 60) + minutes) * 60) + seconds) * 1000;
         timer.start(ms);
       });
 
-      $("#" + id).find("button.stop").on('click', function(event) {
+      timerEl.find("button.stop").on('click', function(event) {
         timer.stop();
       });
 
-      $("#" + id).find("input").on('click', function(event) {
+      timerEl.find("input").on('click', function(event) {
         timer.stop();
       })
 
-      $("#" + id).find("button.delete").on('click', function(event){
-        $("#" + id).remove(); // Since the Timer objects are only referred
+      timerEl.find("button.delete").on('click', function(event){
+        timer.stop();
+        timerEl.remove(); // Since the Timer objects are only referred
         // to by the closures we can just remove the DOM element and jQuery
         // gets rid of all the closures defined in initTimer
       })
+
+      function updateDisplay (hours, minutes, seconds) {
+        timerEl.find("input.hours").val(hours)
+        timerEl.find("input.minutes").val(minutes)
+        timerEl.find("input.seconds").val(seconds)
+        console.log(`id ${this.id} hours ${hours} minutes ${minutes} seconds ${seconds}`)
+      }
     }
 
 

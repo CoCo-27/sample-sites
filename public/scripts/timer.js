@@ -1,7 +1,7 @@
-function Timer(id) {
+function Timer(updateDisplay) {
 
   this.timerId;
-  this.id = id;
+  this.updateDisplay = updateDisplay;
 
   this.updateTimer = function (endTime) {
     var hours, minutes, seconds, remainingTime;
@@ -18,14 +18,6 @@ function Timer(id) {
     minutes = remainingTime / (60 * 1000) % 60 | 0;
     hours = remainingTime / (60 * 60 * 1000) % 24 | 0;
     this.updateDisplay(hours, minutes, seconds);
-  }
-
-  this.updateDisplay = function (hours, minutes, seconds) {
-    var timerEl = $("#" + id);
-    timerEl.find("input.hours").val(hours)
-    timerEl.find("input.minutes").val(minutes)
-    timerEl.find("input.seconds").val(seconds)
-    console.log(`id ${this.id} hours ${hours} minutes ${minutes} seconds ${seconds}`)
   }
 
   this.start = function (duration) {
