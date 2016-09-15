@@ -58,27 +58,31 @@
       <h1>Simple timers</h1>
 
       <!-- This page is a modification of https://www.sitepoint.com/build-javascript-countdown-timer-no-dependencies/ -->
-      <div>
-        <div class="timer" id="firstTimer">
+      <div class="timer-group">
+        <!--
+        <div class="timer" id="first-timer">
           <span>Hours: </span>
-          <span class="hours">
-            0 </span>
+          <input type="text" class="hours">
           <span>Minutes:</span>
-          <span class="minutes">
-             0
-          </span>
+          <input type="text" class="minutes">
           <span>Seconds:</span>
-          <span class="seconds">
-          0
-          </span>
-          <div>
-            <input id="timer-input" type="text" placeholder="3600">
-          </div>
-          <button class="starter"> Start</button>
+          <input type="text" class="seconds">
+          <button class="start"> Start</button>
+          <button class="stop"> Stop</button>
         </div>
+        <div class="timer" id="second-timer">
+          <span>Hours: </span>
+          <input type="text" class="hours">
+          <span>Minutes:</span>
+          <input type="text" class="minutes">
+          <span>Seconds:</span>
+          <input type="text" class="seconds">
+          <button class="start"> Start</button>
+          <button class="stop"> Stop</button>
+        </div>
+    -->
       </div>
     </div>
-
   </div>
   <!-- /.container -->
 
@@ -87,32 +91,63 @@
     ================================================== -->
   <!-- Placed at the end of the document so the pages load faster -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-  <script src="../scripts/timer.js">
+  <script src="../scripts/timer.js"></script>
+
+  <script>
+// TODO read this in from a separate file.
+  /* var html = ' <div class="timer">   <span>Hours: </span>  <input type="text" class="hours"> <span>Minutes:</span> <input type="text" class="minutes"> <span>Seconds:</span>  <input type="text" class="seconds"> <button class="start"> Start</button> <button class="stop"> Stop</button> </div>';
+
+    function attachTimer(id) {
+      $(html).attr("id", id).appendTo(".timer-group");
+    } */
 
 
   </script>
   <script>
-    var timerOne = new Timer("firstTimer");
+    var timerCount = 0;
+    attachTimer("timer-" + timerCount++);
+    attachTimer("timer-" + timerCount++);
+    attachTimer("timer-" + timerCount++);
 
-    var time = $("#firstTimer").find("input");
-    console.log("time: ")
-    console.log(time);
-    console.log(time.val());
-    $("#firstTimer button").on('click', function() {
-      var test = $("#timer-input")
-      console.log("Test");
-      console.log(test)
-      timerOne.startTimer(test.val());
-    });
+    function attachTimer(id) {
+      $.get("./partials/single-timer.html", function(data){
+        $(data).attr("id", id).appendTo(".timer-group");
+        initTimer(id);
+      });
+    }
+// TODO add a button to append additional timers up to a cap, say 20.
+    function initTimer(id) {
+
+      var timer = new Timer(id);
+      $("#" + id).find("button.start").on('click', function(event) {
+        var hours = Number($("#" + id).find("input.hours").val());
+        var minutes = Number($("#" + id).find("input.minutes").val());
+        var seconds = Number($("#" + id).find("input.seconds").val());
+
+        console.log(`hours ${hours} minutes ${minutes} seconds ${seconds}`)
+        var ms = ((((hours * 60) + minutes) * 60) + seconds) * 1000;
+        timer.start(ms);
+      });
+
+      $("#" + id).find("button.stop").on('click', function(event) {
+        timer.stop();
+      });
+
+      $("#" + id).find("input").on('click', function(event) {
+        timer.stop();
+      })
+
+      $("#" + id).find("button.delete").on('click', function(event){
+        $("#" + id).remove(); // Since the Timer objects are only referred
+        // to by the closures we can just remove the DOM element and jQuery
+        // gets rid of all the closures defined in initTimer
+      })
+    }
+
 
   </script>
 
-  <script>
-    var elem = $("div input");
-    //  elem.val("Val!");
-    console.log(elem);
 
-  </script>
 
 
   <!-- Latest compiled and minified JavaScript -->
