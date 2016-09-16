@@ -1,7 +1,8 @@
-function Timer(updateDisplay) {
+function Timer(updateDisplay, audio) {
 
   this.timerId;
   this.updateDisplay = updateDisplay;
+  this.audio = audio;
 
   this.updateTimer = function (endTime) {
     var hours, minutes, seconds, remainingTime;
@@ -9,10 +10,10 @@ function Timer(updateDisplay) {
     remainingTime = endTime - Date.now();
 
     if (remainingTime <= 0) {
-      //   alert("Time's up");
-      console.log("Time's up");
+      this.audio.play();
       remainingTime = 0;
       clearInterval(this.timerId);
+      this.timerId = null;
     }
     seconds = remainingTime / 1000 % 60 | 0;
     minutes = remainingTime / (60 * 1000) % 60 | 0;
@@ -37,6 +38,8 @@ function Timer(updateDisplay) {
   this.stop = function(){
 
     clearInterval(this.timerId);
+    this.audio.load(); // WARNING: this is an ugly hack since I haven't been
+    //able to find a better way to stop and reset the audio file.
     // the reference needs to be null, so that the timer can be restarted.
     this.timerId = null;
   }
