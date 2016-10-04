@@ -18,7 +18,7 @@
   <!-- Custom styles for this template -->
   <link rel="stylesheet" href="../css/footer.css">
   <link href="../css/starter-template.css" rel="stylesheet">
-  <link href="../css/timer.css" rel="stylesheet">
+  <link type="text/css" href="../css/timer.css" rel="stylesheet">
 
 
   <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -83,6 +83,9 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
   <script src="../scripts/timer.js"></script>
 
+
+
+
   <script>
     attachTimer();
 
@@ -93,6 +96,16 @@
     function attachTimer() {
       $.get("./partials/single-timer.html", function(data){
         var timerEl = $(data).appendTo(".timer-group");
+        // Remove focus from the label when you press enter
+// TODO, I should not have to search for .timer-label here, not like I have.  timerEl.find should work, right?
+//        ALSO, inspecting the page completely breaks the formatting and it does not return when you close the dev
+//        console...
+        timerEl.children(".timer-label").keypress(function(e) {
+    //    $(".timer-label").keypress(function(e) {
+        if(e.which == 13) {
+          this.blur();
+        }
+    });
         initTimer(timerEl);
       });
     }
@@ -100,13 +113,7 @@
     function initTimer(timerEl) {
       var audio = new Audio("../audio/250629__kwahmah-02__alarm1.mp3");
       var timer = new Timer(updateDisplay, audio);
-      timerEl.find("button.start").on('click', function(event) {
-        var hours = Number(timerEl.find("input.hours").val());
-        var minutes = Number(timerEl.find("input.minutes").val());
-        var seconds = Number(timerEl.find("input.seconds").val());
-        var ms = ((((hours * 60) + minutes) * 60) + seconds) * 1000;
-        timer.start(ms);
-      });
+      timerEl.find("button.start").on('click', startTimer);
 
       timerEl.find("button.stop").on('click', function(event) {
         timer.stop();
@@ -114,7 +121,15 @@
 
       timerEl.find("input").on('click', function(event) {
         timer.stop();
-      })
+      });
+
+      timerEl.find("input.hours, input.minutes, input.seconds").keypress(
+        function(e){
+          if(e.which == 13) {
+            startTimer();
+            this.blur();
+          }
+        });
 
       timerEl.find("button.delete").on('click', function(event){
         timer.stop();
@@ -122,6 +137,14 @@
         // to by the closures we can just remove the DOM element and jQuery
         // gets rid of all the closures defined in initTimer
       })
+
+      function startTimer(){
+        var hours = Number(timerEl.find("input.hours").val());
+        var minutes = Number(timerEl.find("input.minutes").val());
+        var seconds = Number(timerEl.find("input.seconds").val());
+        var ms = ((((hours * 60) + minutes) * 60) + seconds) * 1000;
+        timer.start(ms);
+      }
 
       function updateDisplay (hours, minutes, seconds) {
         timerEl.find("input.hours").val(hours);
