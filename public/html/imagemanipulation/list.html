@@ -73,32 +73,41 @@
       console.log("loaded");
       console.log(this.height);
       ctx.fillStyle = "dimgrey";
-      var fontHeight = 18;
+      var fontHeight = 20;
       var x = 10;
       var y = 10;
       var margin = 50;
 
       cardImage.onload = function() {
-        drawCard(x, y, "Ironcliff Guardian", cardImage , this, fontHeight, ctx);
+        drawCard(x, y, "Ironcliff Guardian", 5, cardImage , this, fontHeight, ctx);
       }.bind(this);
 
       cardImage.src = "../../images/f2_kibeholder.png";
   };
 
-  function drawCard(x, y, text, cardImage, backgroundImage, fontHeight, ctx){
-    var margin = 50;
+  function drawCard(x, y, text, cost, cardImage, backgroundImage, fontHeight, ctx){
+    var textX = 50;
+    var manaX = 14;
+    var h = backgroundImage.height;
+    var w = backgroundImage.width;
+    //
+    ctx.filter = "brightness(40%)";
     ctx.drawImage(backgroundImage, x, y);
-    ctx.drawImage(cardImage, x, y);
+    ctx.filter = "none";
+    ctx.drawImage(cardImage, 100, 0, 100, 100, x + w -61, y - h + 15, 75, 75);
+    // The constants are dirty hacks to push the icons into position.
     ctx.font = fontHeight + "px serif";
     ctx.fillStyle = "white";
 
-    // To center the font, it's edges must same distance, d, from the nearest
+    // To center the font, its edges must same distance, d, from the nearest
     // edge of the image.
 
-    var d = (image.height - fontHeight)/2;
-//    ctx.textBaseline = "bottom";
+    var d = (h - fontHeight)/2;
     ctx.textBaseline = "top";
-    ctx.fillText(text, x + margin, y + d, 200);
+    ctx.fillText(text, x + textX, y + d*0.9, 200); // Irritatingly, this does not
+    // look perfect without an arbitrary multiplication.  For some reason the
+    // text doesn't seem centered on the y axis (though it should be),
+    ctx.fillText(cost, x + manaX, y + d*0.9)
   }
 
   backgroundImage.src = "../../images/deck_builder_card_bg.png";
