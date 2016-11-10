@@ -63,27 +63,40 @@
   </div>
 
   <script type="text/javascript">
+  var x = 10;
+  var y = 10;
+  loadImage(x, y, "Ironcliff Guardian", 5, "../../images/f2_kibeholder.png")
+  loadImage(x, 50, "Horn of the Forsaken", 1, "../../images/artifact_f4_hornofforsaken.png")
+  function loadImage(x, y, text, cost, src){
     var c = window.document.getElementById("canvas");
     var ctx = c.getContext("2d");
     var backgroundImage = new Image();
     var cardImage = new Image();
     var domImage = window.document.getElementById("an-image");
 
+//TODO this is awful.  Currently it repeatedly loads the image to trigger
+// the onload function.  Gah.  It should be loaded once and then skip straight
+// to drawing the card (assuming that image has been loaded).
     backgroundImage.onload = function(){
       console.log("loaded");
       console.log(this.height);
       ctx.fillStyle = "dimgrey";
       var fontHeight = 20;
-      var x = 10;
-      var y = 10;
+
       var margin = 50;
 
       cardImage.onload = function() {
-        drawCard(x, y, "Ironcliff Guardian", 5, cardImage , this, fontHeight, ctx);
+        drawCard(x, y, text , cost, cardImage, this, fontHeight, ctx);
       }.bind(this);
 
-      cardImage.src = "../../images/f2_kibeholder.png";
+      cardImage.src = src;
   };
+
+
+    backgroundImage.src = "../../images/deck_builder_card_bg.png";
+
+  }
+
 
   function drawCard(x, y, text, cost, cardImage, backgroundImage, fontHeight, ctx){
     var textX = 50;
@@ -109,8 +122,6 @@
     // text doesn't seem centered on the y axis (though it should be),
     ctx.fillText(cost, x + manaX, y + d*0.9)
   }
-
-  backgroundImage.src = "../../images/deck_builder_card_bg.png";
 
   //  ctx.drawImage(img,50,50);
   </script>
