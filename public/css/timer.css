@@ -7,10 +7,14 @@ input.timer-label:hover {
 }
 
 input {
-  width: 5%
+  width: 5%;
 }
 
 input.timer-label {
   width: 15%;
   border: solid transparent 1px;
+}
+
+.inline-div {
+  float: left;
 }

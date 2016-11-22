@@ -62,69 +62,8 @@
 
   </div>
 
-  <script type="text/javascript">
-  var x = 10;
-  var y = 10;
-  loadImage(x, y, "Ironcliff Guardian", 5, "../../images/f2_kibeholder.png")
-  loadImage(x, 50, "Horn of the Forsaken", 1, "../../images/artifact_f4_hornofforsaken.png")
-  function loadImage(x, y, text, cost, src){
-    var c = window.document.getElementById("canvas");
-    var ctx = c.getContext("2d");
-    var backgroundImage = new Image();
-    var cardImage = new Image();
-    var domImage = window.document.getElementById("an-image");
-
-//TODO this is awful.  Currently it repeatedly loads the image to trigger
-// the onload function.  Gah.  It should be loaded once and then skip straight
-// to drawing the card (assuming that image has been loaded).
-    backgroundImage.onload = function(){
-      console.log("loaded");
-      console.log(this.height);
-      ctx.fillStyle = "dimgrey";
-      var fontHeight = 20;
-
-      var margin = 50;
-
-      cardImage.onload = function() {
-        drawCard(x, y, text , cost, cardImage, this, fontHeight, ctx);
-      }.bind(this);
-
-      cardImage.src = src;
-  };
 
 
-    backgroundImage.src = "../../images/deck_builder_card_bg.png";
-
-  }
-
-
-  function drawCard(x, y, text, cost, cardImage, backgroundImage, fontHeight, ctx){
-    var textX = 50;
-    var manaX = 14;
-    var h = backgroundImage.height;
-    var w = backgroundImage.width;
-    //
-    ctx.filter = "brightness(40%)";
-    ctx.drawImage(backgroundImage, x, y);
-    ctx.filter = "none";
-    ctx.drawImage(cardImage, 100, 0, 100, 100, x + w -61, y - h + 15, 75, 75);
-    // The constants are dirty hacks to push the icons into position.
-    ctx.font = fontHeight + "px serif";
-    ctx.fillStyle = "white";
-
-    // To center the font, its edges must same distance, d, from the nearest
-    // edge of the image.
-
-    var d = (h - fontHeight)/2;
-    ctx.textBaseline = "top";
-    ctx.fillText(text, x + textX, y + d*0.9, 200); // Irritatingly, this does not
-    // look perfect without an arbitrary multiplication.  For some reason the
-    // text doesn't seem centered on the y axis (though it should be),
-    ctx.fillText(cost, x + manaX, y + d*0.9)
-  }
-
-  //  ctx.drawImage(img,50,50);
-  </script>
   <!-- Bootstrap core JavaScript
     ================================================== -->
   <!-- Placed at the end of the document so the pages load faster -->
@@ -134,6 +73,16 @@
     window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')
 
   </script>
+
+  <script src="../../scripts/images.js"></script>
+
+<script type="text/javascript">
+  var x = 10;
+  var y = 10;
+  loadImage(x, y, "Ironcliff Guardian", 5, "../../images/f2_kibeholder.png")
+  loadImage(x, 50, "Horn of the Forsaken", 1, "../../images/artifact_f4_hornofforsaken.png")
+  </script>
+
   <!-- Latest compiled and minified JavaScript -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 </body>
