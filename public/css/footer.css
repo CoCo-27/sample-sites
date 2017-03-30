@@ -19,6 +19,9 @@ body {
   background-color: #f5f5f5;
 }
 
+OKAY The css is being odd.  It looks like the size of the parent form is independent
+of the form elements, so setting them to 5% looks fine and dandy, but any element that
+is supposed to be adjacent to them won't be, since they're aligned with the parent...
 
 /* Custom page CSS
 -------------------------------------------------- */

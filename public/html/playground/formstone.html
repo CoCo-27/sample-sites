@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <link type="text/css" href="../../assets/formstone/dist/css/navigation.css" rel="stylesheet">
+     Using the Formstone demo css
+     <link rel="stylesheet" href="https://formstone.it/demo/css/site.css?v=1.3.0">
+<!--    <link rel="stylesheet" href="../../assets/formstone/dist/css/themes/light.css"> -->
+<style>
+@media screen and (min-width: 980px) {
+    .nav_offscreen,
+    .nav_handle {
+      display: none;
+    }
+  } </style>
+
+    <title>Formstone example</title>
+</head>
+
+<body>
+    <div class="nav_content">
+        <button type="button" class="nav_handle">Menu</button>
+    </div>
+    <nav class="navigation" data-navigation-handle=".nav_handle" data-navigation-content=".nav_content">
+        <a href="#">One</a>
+        <a href="#">Two</a>
+        <a href="#">Three</a>
+    </nav>
+
+  <!--  <h5 class="nav_handle">Menu Basic</h5>
+<nav class="navigation-two" data-navigation-handle=".nav_handle">
+	<a href="#">One</a>
+	<a href="#">Two</a>
+	<a href="#">Three</a>
+</nav> -->
+</body>
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"> </script>
+<script src="../../assets/formstone/dist/js/core.js"></script>
+<script src="../../assets/formstone/dist/js/swap.js"></script>
+<script src="../../assets/formstone/dist/js/mediaquery.js"></script>
+<script src="../../assets/formstone/dist/js/navigation.js"></script>
+<script type="text/javascript">
+$(".navigation-two").navigation();
+    $(".navigation").navigation({
+        type: "overlay",
+        gravity: "left"
+    });
+</script>
+
+</html>

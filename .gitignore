@@ -2,6 +2,10 @@
 node_modules
 npm-debug.log
 
+# Bower
+bower_components/
+
+
 # Local development
 *.env
 *.dev
