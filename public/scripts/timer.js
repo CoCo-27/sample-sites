@@ -4,7 +4,9 @@ function Timer(updateDisplay, audio) {
   this.updateDisplay = updateDisplay;
   this.audio = audio;
 
+  // TODO make this private.
   this.updateTimer = function (endTime) {
+    console.log("Timer tick.");
     var hours, minutes, seconds, remainingTime;
 
     remainingTime = endTime - Date.now();
@@ -18,7 +20,8 @@ function Timer(updateDisplay, audio) {
     seconds = remainingTime / 1000 % 60 | 0;
     minutes = remainingTime / (60 * 1000) % 60 | 0;
     hours = remainingTime / (60 * 60 * 1000) % 24 | 0;
-    this.updateDisplay(hours, minutes, seconds);
+    this.updateDisplay(remainingTime);
+  //  this.updateDisplay(hours, minutes, seconds);
   }
 
   this.start = function (duration) {
@@ -33,10 +36,11 @@ function Timer(updateDisplay, audio) {
     } else {
       console.log("Timer already running.");
     } // otherwise we simply ignore it, since we want each Timer to only deal with one interval.
+
   }
 
   this.stop = function(){
-
+    console.log("Stopping timer.");
     clearInterval(this.timerId);
     this.audio.load(); // WARNING: this is an ugly hack since I haven't been
     //able to find a better way to stop and reset the audio file.

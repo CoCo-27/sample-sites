@@ -1,0 +1,49 @@
+.pomodoro > .timer {
+  line-height: 2;
+/*   height: 2.2em;
+ display: inline-block; */
+  float: left;
+  text-align: center;
+  font-size: 18px;
+  text-shadow: black 1px 1px;
+  color: white;
+  border-style: solid;
+  border-color: black;
+}
+
+.pomodoro > .first-timer {
+/* width: 250px; */
+  background-color: green;
+  margin-right: 0;
+  border-width: thin 0px thin thin;
+
+}
+
+.pomodoro > .second-timer {
+  /*width: 30px;*/
+  background-color: blue;
+  border-width: thin 0px thin 0px;
+}
+
+.pomodoro > .break-timer {
+  /*width: 50px;*/
+  background-color: red;
+  border-width: thin thin thin 0px;
+}
+
+/* Bootstrap dropdown */
+
+ul.dropdown-menu > li {
+  text-align: center;
+}
+
+ul.dropdown-menu > li:hover {
+  background-color: lightblue;
+}
+
+.dropdown {
+  display: inline-block;
+}
+.dropdown > button{
+  font-size: 10px;
+}

@@ -101,12 +101,12 @@
 
 
     <script>
-        $(function() {
+       /*  $(function() {
             $(".slider").slider({
                 orientation: "vertical"
             });
             console.log("Slider should exist")
-        });
+        }); */
         attachTimer();
 
         $("button.add-timer").on('click', function(event) {
@@ -115,7 +115,7 @@
 
         function attachTimer() {
             $.get("./partials/single-timer.html", function(data) {
-              $( "#slider" ).slider({orientation: "vertical"});
+          //    $( "#slider" ).slider({orientation: "vertical"});
                 var timerEl = $(data).appendTo(".timer-group");
                 //    timerEl.children(".volume").slider();
                 // Remove focus from the label when you press enter
@@ -133,7 +133,7 @@
         }
 
         function initTimer(timerEl) {
-
+            console.log("Creating timer.");
             // TODO make this quieter by default and adjustable!
             var audio = new Audio("../audio/250629__kwahmah-02__alarm1.mp3");
             audio.volume = 0.1;
@@ -164,6 +164,7 @@
             })
 
             function startTimer() {
+                console.log("Starting timer.");
                 var hours = Number(timerEl.find("input.hours").val());
                 var minutes = Number(timerEl.find("input.minutes").val());
                 var seconds = Number(timerEl.find("input.seconds").val());
@@ -171,7 +172,11 @@
                 timer.start(ms);
             }
 
-            function updateDisplay(hours, minutes, seconds) {
+            function updateDisplay(remainingTime) {
+              console.log("Updating display.");
+              var seconds = remainingTime / 1000 % 60 | 0;
+              var minutes = remainingTime / (60 * 1000) % 60 | 0;
+              var hours = remainingTime / (60 * 60 * 1000) % 24 | 0;
                 timerEl.find("input.hours").val(hours);
                 timerEl.find("input.minutes").val(minutes);
                 timerEl.find("input.seconds").val(seconds);
