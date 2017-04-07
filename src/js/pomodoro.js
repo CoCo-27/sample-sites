@@ -14,40 +14,53 @@ var pomodoro = (function ($) {
       this.notesTimer = null;
       this.breakTimer = null;
 
-      var multiplier = 11;
+      var widthCoefficient = 11;
+      var minutesToSeconds = 1000;
+
 
       this.startWorking = function startWorking(){
         // convert minutes to seconds and then start the timer
-        workTimer.start(work * 60);
-        if(notes > 0){
-          notesTimer.start((notes + work) * 60);
+        this.workTimer.prepare(this.work * minutesToSeconds);
+        if(this.notes > 0){
+          this.notesTimer.prepare((this.notes + this.work) * minutesToSeconds);
         }
+        this.restart();
       };
+
+      this.pause = function pause() {
+        // TODO placeholder pause, just stopping the timers.
+        this.stop();
+      }
+
+      this.restart = function restart() {
+        this.workTimer.start();
+        this.notesTimer.start();
+      }
 
       this.startBreak = function startBreak() {
         // convert minutes to seconds and then start the timer
-        breakTimer.start(breakTime * 60);
+        this.breakTimer.start(breakTime * minutesToSeconds);
       };
 
       this.stop = function stop() {
-        workTimer.stop();
-        notesTimer.stop();
-        breakTimer.stop();
+        this.workTimer.stop();
+        this.notesTimer.stop();
+        this.breakTimer.stop();
       };
 
       this.setTime = function setTime(time, type) {
         switch (type) {
           case 0:
             this.work = time;
-            element.children('.first-timer').width(multiplier*this.work);
+            element.children('.first-timer').width(widthCoefficient*this.work);
             break;
           case 1:
             this.notes = time;
-            element.children('.second-timer').width(multiplier*this.notes);
+            element.children('.second-timer').width(widthCoefficient*this.notes);
             break;
           case 2:
             this.breakTime = time;
-            element.children('.break-timer').width(multiplier*this.breakTime);
+            element.children('.break-timer').width(widthCoefficient*this.breakTime);
             break;
           default:
 
@@ -61,19 +74,25 @@ var pomodoro = (function ($) {
 
       // Initial update.
       this.updateTimes(work, notes, breakTime);
+      this.setWorkTimer = function setWorkTimer(updateDisplay, audio) {
+        window.console.log("Setting work timer:");
+        this.workTimer = new Timer(updateDisplay, audio);
+        window.console.log(this.workTimer);
+      };
+
+
+      this.setNotesTimer = function setNotesTimer (updateDisplay, audio) {
+          this.notesTimer = new Timer(updateDisplay, audio);
+      };
+
+      this.setBreakTimer = function setBreakTimer (updateDisplay, audio) {
+        this.breakTimer = new Timer(updateDisplay, audio);
+      };
   }
 
-  Pomodoro.prototype.setWorkTimer = function (updateDisplay, audio) {
-    this.workTimer = new Timer(updateDisplay, audio);
-  };
 
-  Pomodoro.prototype.setNotesTimer = function (updateDisplay, audio) {
-    this.notesTimer = new Timer(updateDisplay, audio);
-  };
 
-  Pomodoro.prototype.setBreakTimer = function (updateDisplay, audio) {
-    this.breakTimer = new Timer(updateDisplay, audio);
-  };
+
 
   module.create = function createPomodoro(work, notes, breakTime, element) {
     return new Pomodoro(work, notes, breakTime, element);

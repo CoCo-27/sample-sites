@@ -9,11 +9,11 @@ var gulp = require('gulp'),
     browserSync = require('browser-sync').create(),
     sass = require('gulp-ruby-sass'),
     autoprefixer = require('gulp-autoprefixer'),
-    rm = require('gulp-rimraf'),
     uglify = require('gulp-uglify'),
     merge = require('merge-stream'),
     cleanCSS = require('gulp-clean-css'),
-    babel = require('gulp-babel');
+    babel = require('gulp-babel'),
+    del = require('del');
 
 // TODO consider if it's necessary to have multiple paired cleaning and building
 // tasks and if the path names should be vars (since they get re-used).
@@ -21,13 +21,13 @@ var gulp = require('gulp'),
 // Helper function to ensure certain functions are only invoked in the production
 // environment.
 function productionOnly(fn) {
-    return gutil.env.type === 'production' ? fn() : gutil.noop();
+    return gutil.env.production ? fn() : gutil.noop();
 }
 
 // Helper function to ensure certain functions are only invoked in the development
 // environment.
 function devOnly(fn) {
-    return gutil.env.type === 'production' ? gutil.noop() : fn();
+    return gutil.env.dev ? gutil.noop() : fn();
 }
 
 // define the default task and add the watch task to it
@@ -46,6 +46,7 @@ gulp.task('serve', ['reload-all'], function() {
     gulp.watch('src/css/**/*.css', ['reload-css']);
     gulp.watch('src/scss/**/*.scss', ['reload-css']);
     gulp.watch('src/html/**/*.html', ['reload-html']);
+    gulp.watch('src/assets/**/*', ['reload-assets']);
 });
 
 function jshintHelper() {
@@ -63,28 +64,33 @@ function jshintHelper() {
 // Also, reload() ends up getting called before the server has started.
 // Fortunately this is a no-op.
 
-gulp.task('reload-all', ['build-js', 'bundle-css', 'copy-html'], function() {
+gulp.task('reload-all', ['build-js', 'bundle-css', 'copy-html', 'copy-assets'], function() {
     browserSync.reload();
     jshintHelper();
 });
 
 
-
 // Delete the distribution.
 gulp.task('clean', function() {
-    return gulp.src('dist/*').pipe(rm());
+    return del(['dist/*']);
 });
 
 // Specific cleaners
 gulp.task('clean-html', function () {
-    return gulp.src('dist/**/*.html').pipe(rm());
+    return del(['dist/**/*.html']);
 });
 gulp.task('clean-css', function () {
-    return gulp.src('dist/assets/css/**/*').pipe(rm());
+    return del(['dist/css/**/*']);
 });
-gulp.task('clean-css', function () {
-    return gulp.src('dist/assets/js/**/*').pipe(rm());
+gulp.task('clean-js', function () {
+    return del(['dist/js/**/*']);
 });
+gulp.task('clean-assets', function () {
+  return del(['dist/assets/**/*']);
+});
+
+// no such file or directory, open '/home/oliver/Webdev/heroku/sample-sites/dist/assets/images/deck_builder_card_bg.png'
+
 
 // Pre-process the css.
 function processScss () {
@@ -104,17 +110,17 @@ gulp.task('reload-css', ['bundle-css'], function () {
 // Separate scss processing task.
 gulp.task('build-scss', ['clean-css'], function () {
     return processScss()
-        .pipe(gulp.dest('dist/assets/css'));
+        .pipe(gulp.dest('dist/css'));
 });
 
 // Get the pre-processed scss, bundle it up with the existing css and add any
 // mising prefixes.
 gulp.task('bundle-css', ['clean-css'], function () {
-  return merge(processScss(), gulp.src('src/css/**/*.css'))
+ return merge(processScss(), gulp.src('src/css/**/*.css'))
     .pipe(autoprefixer())
     .pipe(concat('bundle.min.css'))
-    .pipe(cleanCSS({compatibility: 'ie8'}))
-    .pipe(gulp.dest('dist/assets/css'));
+    .pipe(productionOnly(cleanCSS({compatibility: 'ie8'})))
+    .pipe(gulp.dest('dist/css'));
 });
 
 gulp.task('reload-js', ['build-js'], function () {
@@ -124,10 +130,10 @@ gulp.task('reload-js', ['build-js'], function () {
 
 // Bundle up and minify the javascript, including sourcemaps so that
 // dev-tools can point you to the right js file.
-gulp.task('build-js', ['clean'], function () {
+gulp.task('build-js', ['clean-js'], function () {
     return gulp.src('src/js/**/*.js')
-        .pipe(sourcemaps.init())
-        .pipe(concat('bundle.min.js'))
+       .pipe(sourcemaps.init())
+       .pipe(concat('bundle.min.js'))
         // uglify cannot cope with es6 js, so we use babel to convert it first.
         .pipe(babel({
             presets: ['es2015']
@@ -143,7 +149,7 @@ gulp.task('build-js', ['clean'], function () {
         }))
         //.pipe(devOnly(uglify))
         .pipe(sourcemaps.write())
-        .pipe(gulp.dest('dist/assets/js'));
+        .pipe(gulp.dest('dist/js'));
 });
 
 gulp.task('reload-html', ['copy-html'], function () {
@@ -152,7 +158,16 @@ gulp.task('reload-html', ['copy-html'], function () {
 
 // At the moment this is pretty trivial, but it allows us to torch the entire
 // contents of the dist directory when we clean.
-gulp.task('copy-html', ['clean'], function () {
+gulp.task('copy-html', ['clean-html'], function () {
   return gulp.src('src/html/**/*.html')
     .pipe(gulp.dest('dist'))
+});
+
+gulp.task('reload-assets', ['copy-assets'], function () {
+  browserSync.reload();
+});
+
+gulp.task('copy-assets', ['clean-assets'], function () {
+  return gulp.src('src/assets/**/*')
+    .pipe(gulp.dest('dist/assets'))
 });

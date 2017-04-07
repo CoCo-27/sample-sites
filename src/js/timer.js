@@ -1,52 +1,54 @@
 function Timer(updateDisplay, audio) {
 
-  this.timerId = null;
-  this.updateDisplay = updateDisplay;
-  this.audio = audio;
-
-  // TODO make this private.
-  this.updateTimer = function (endTime) {
-    console.log("Timer tick.");
-    var hours, minutes, seconds, remainingTime;
-
-    remainingTime = endTime - Date.now();
-
-    if (remainingTime <= 0) {
-      this.audio.play();
-      remainingTime = 0;
-      clearInterval(this.timerId);
-      this.timerId = null;
-    }
-    seconds = remainingTime / 1000 % 60 | 0;
-    minutes = remainingTime / (60 * 1000) % 60 | 0;
-    hours = remainingTime / (60 * 60 * 1000) % 24 | 0;
-    this.updateDisplay(remainingTime);
-  //  this.updateDisplay(hours, minutes, seconds);
-};
-
-  this.start = function (duration) {
-    console.log("duration " + duration);
-    console.log(Number(duration));
-    if (this.timerId === undefined) {
-      if (Number(duration)) {
-        this.timerId = setInterval(this.updateTimer.bind(this), 100, Date.now() + Number(duration));
-      } else {
-        console.log("Malformed time input.");
-      }
-    } else {
-      console.log("Timer already running.");
-    } // otherwise we simply ignore it, since we want each Timer to only deal with one interval.
-
-  };
-
-  this.stop = function() {
-    console.log("Stopping timer.");
-    clearInterval(this.timerId);
-    this.audio.load(); // WARNING: this is an ugly hack since I haven't been
-    //able to find a better way to stop and reset the audio file.
-    // the reference needs to be null, so that the timer can be restarted.
     this.timerId = null;
-  };
+    this.updateDisplay = updateDisplay;
+    this.audio = audio;
+    this.duration = null;
+    this.paused = false;
+
+    // update every tenth of a second.
+    var delta = 100;
+
+    // TODO make this private.
+    this.updateTimer = function(endTime) {
+        var hours, minutes, seconds, remainingTime;
+
+        this.duration = endTime - Date.now();
+
+        if (this.duration <= 0) {
+            this.audio.play();
+            this.duration = 0;
+            clearInterval(this.timerId);
+            this.timerId = null;
+        }
+        this.updateDisplay(this.duration);
+    };
+
+    this.prepare = function prepare(duration) {
+        if (!Number(duration)) throw new Error("Malformed time input.  Please enter a number");
+        this.duration = duration; // If the timer has a non-zero duration it is
+        // ready to go.
+    }
+
+    this.start = function() {
+        if (this.duration > 0) { // The timer is in the ready state and can be
+            // toggled between paused and running
+            if (this.timerId === null) {  // The timer is not running and should
+              // be started
+                if (!Number(this.duration)) throw new Error("Malformed time input.  Please enter a number");
+                this.timerId = setInterval(this.updateTimer.bind(this), delta, Date.now() + Number(this.duration));
+            }  // It is already running.
+        } // If it's not ready then nothing happens.
+    };
+
+
+    this.stop = function() {
+        clearInterval(this.timerId);  // If no timer is running, this does nothing.
+        this.audio.load(); // WARNING: this is an ugly hack since I haven't been
+        //able to find a better way to stop and reset the audio file.
+        // the reference needs to be null, so that the timer can be restarted.
+        this.timerId = null;
+    };
 }
 
 /*var timer = new Timer("an id");

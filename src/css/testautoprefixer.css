@@ -1,7 +1,0 @@
-div.charlie-brown {
-    width: 100px;
-    height: 100px;
-    background: red;
-    columns: auto;
-    transition: width 2s;
-}

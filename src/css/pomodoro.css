@@ -47,3 +47,17 @@ ul.dropdown-menu > li:hover {
 .dropdown > button{
   font-size: 10px;
 }
+
+
+div.btn-group > button.notready {
+  opacity: 0.1;
+  transition: all 2s ease-in-out;
+}
+
+
+
+
+div.btn-group > button.ready {
+  opacity: 1.0;
+  transition: all 2s ease-in-out;
+}
