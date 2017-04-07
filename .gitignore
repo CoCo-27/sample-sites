@@ -1,10 +1,17 @@
 # Node build artifacts
-node_modules
+/node_modules
 npm-debug.log
 
 # Bower
-bower_components/
+/bower_components/
 
+# Distribution
+
+/dist
+
+# SASS cache
+
+/.sass-cache
 
 # Local development
 *.env

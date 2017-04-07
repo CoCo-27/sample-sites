@@ -1,0 +1,20 @@
+input.timer-label:focus {
+  border: solid 1px darkgrey;
+}
+
+input.timer-label:hover {
+  border: solid 1px darkgrey;
+}
+
+input {
+  width: 5%;
+}
+
+input.timer-label {
+  width: 15%;
+  border: solid transparent 1px;
+}
+
+.inline-div {
+  float: left;
+}
